@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#--------------------------------------------------------------------
+
+# this script will change the orientation of screen to right , left , inverted etc
+
+#-------------------------------------------------------------------
+
+# Path to gnome-randr.py
+RANDR_SCRIPT="/opt/gnome-randr.py"
+SCREEN="eDP-1"
+
+# Help message
+print_help() {
+    echo "Usage: rotate [orientation]"
+    echo
+    echo "Arguments:"
+    echo "  right       Rotate screen to portrait (right)"
+    echo "  left        Rotate screen to portrait (left)"
+    echo "  normal      Set screen back to normal landscape"
+    echo "  inverted    Flip screen upside down"
+    echo
+    echo "Options:"
+    echo "  -h, --help  Show this help message and exit"
+    echo
+    echo "Example:"
+    echo "  rotate right      # Rotates screen to the right"
+}
+
+# If -h or --help is passed
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    print_help
+    exit 0
+fi
+
+# Check for empty input
+if [[ -z "$1" ]]; then
+    echo "Error: No orientation provided. Use -h for help."
+    exit 1
+fi
+
+# Validate orientation
+case "$1" in
+    right|left|normal|inverted)
+        orientation="$1"
+        ;;
+    *)
+        echo "Error: Invalid orientation '$1'"
+        echo "Use -h for help."
+        exit 1
+        ;;
+esac
+
+# Run the command
+"$RANDR_SCRIPT" --output "$SCREEN" --rotate "$orientation"
